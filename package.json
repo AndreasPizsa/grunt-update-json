@@ -1,0 +1,48 @@
+{
+  "name": "grunt-update-json",
+  "description": "Merge parts from one or more JSON files together. I use `grunt-update-json` to keep my `Bower.json` and `component.json` in sync with `package.json`.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/andreaspizsa/grunt-update-json",
+  "author": {},
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/andreaspizsa/grunt-update-json.git"
+  },
+  "bugs": {
+    "url": "https://github.com/andreaspizsa/grunt-update-json/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/andreaspizsa/grunt-update-json/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt": "~0.4.2"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.2"
+  },
+  "keywords": [
+    "gruntplugin",
+    "json",
+    "merge",
+    "update",
+    "sync",
+    "bower.json",
+    "component.json"
+  ],
+  "dependencies": {
+    "lodash": "~2.4.1"
+  }
+}
