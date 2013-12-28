@@ -1,3 +1,5 @@
 node_modules
 npm-debug.log
 tmp
+grunt-update-json.sublime-project
+grunt-update-json.sublime-workspace
