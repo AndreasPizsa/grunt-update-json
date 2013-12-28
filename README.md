@@ -2,6 +2,8 @@
 
 Merge parts from one or more JSON files together. I use `grunt-update-json` to keep my `Bower.json` and `component.json` in sync with `package.json`.
 
+[![Endorse on Coderwall](http://api.coderwall.com/andreaspizsa/endorsecount.png)](http://coderwall.com/andreaspizsa)
+[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 ## Getting Started
 This plugin requires Grunt `~0.4.2`
