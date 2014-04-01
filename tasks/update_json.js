@@ -54,7 +54,7 @@ module.exports = function(grunt) {
       }
 
       theDest = _.merge(theDest,theSourceData);
-      grunt.file.write(file.dest, JSON.stringify(theDest,null,'\t'));
+      grunt.file.write(file.dest, JSON.stringify(theDest,null,'\t') + '\n');
     });
   })
 };
