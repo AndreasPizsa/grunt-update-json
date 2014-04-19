@@ -25,10 +25,11 @@
     "test": "grunt test"
   },
   "devDependencies": {
-    "grunt-contrib-jshint": "~0.6.0",
+    "grunt": "~0.4.2",
     "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-nodeunit": "~0.2.0",
-    "grunt": "~0.4.2"
+    "json-pointer": "~0.1.0"
   },
   "peerDependencies": {
     "grunt": "~0.4.2"
@@ -36,11 +37,13 @@
   "keywords": [
     "gruntplugin",
     "json",
+    "json pointer",
     "merge",
     "update",
     "sync",
     "bower.json",
-    "component.json"
+    "component.json",
+    "composer.json"
   ],
   "dependencies": {
     "lodash": "~2.4.1"
