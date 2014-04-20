@@ -14,7 +14,12 @@ module.exports = function(grunt) {
   grunt.initConfig({
     watch: {
       default: {
-        files: ["test/*.js", "test/fixtures/**", "tasks"],
+        files: [
+          "Gruntfile.js",
+          "test/*.js",
+          "test/fixture/**/*.*",
+          "tasks/**"
+        ],
         tasks: ["default"]
       }
     },

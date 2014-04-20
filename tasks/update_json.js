@@ -45,15 +45,17 @@ function UpdateJSON(grunt) {
 
         // put fields in canonical (key-value object) form
         // first, break up a single string, if found
-        fields = !_.isString(fields) ? fields : fields.split(/\s*,\s*/);
+        if(_.isString(fields)){
+          fields = fields.split(/\s*,\s*/);
+        }
 
         // then, turn an array of fieldspecs:
         //  ["field", "from>to", {"from": "to"}]
-        fields = !_.isArray(fields) ? fields : _.reduce(fields, mergeField, {});
+        if(_.isArray(fields)){
+          fields = _.reduce(fields, mergeField, {});
+        }
 
         copied = _.reduce(fields, expandField(input), copied);
-
-        if(output == null){ warn('Could not read file ' + file.dest); }
 
         grunt.file.write(
           file.dest,
@@ -63,27 +65,33 @@ function UpdateJSON(grunt) {
     }
   );
   
-  // factory for a reduce function, bound to the input, that can get get
-  // the value out of 
+  // factory for a reduce function, bound to the input, that can get
+  // the value out of the input
   function expandField(input){
     return function(memo, fin, fout){
-      memo[fout] =
+      if(_.isString(fin)){
         // field name, interpret as an absolute JSON pointer
-        _.isString(fin) ? pointer.get(input, "/" + fin) :
+        memo[fout] = pointer.get(input, "/" + fin);
+      }else if(_.isFunction(fin)){
         // call a function
-        _.isFunction(fin) ? fin(input) :
+        memo[fout] = fin(input);
+      }else if(_.isArray(fin)){
         // pick out the values
-        _.isArray(fin) ? _.values(_.pick(input, fin)) :
+        memo[fout] = _.values(_.pick(input, fin));
+      }else if(_.isObject(fin)){
         // build up an object of something else
-        _.isObject(fin) ? _.reduce(fin, expandField(input), {}) :
+        memo[fout] = _.reduce(fin, expandField(input), {});
+      }else if(_.isNull(fin)){
         // copy the value
-        _.isNull(fin) ? input[fout] :
-        warn('Could not map ' + fin + ' to ' + fout);
-
+        memo[fout] = input[fout];
+      }else{
+        warn('Could not map `' + JSON.stringify(fin) + '` to `' + 
+          JSON.stringify(fout) + '`');
+      }
       return memo;
     };
   }
-  
+
   // Parse a fieldspec, like ["field", "to<from", {"to": "from"}]
   function mergeField(memo, key){
     var result = {},

@@ -18,7 +18,7 @@ function fake_grunt(key, callback, errback){
   grunt.fail.warn = grunt.fail.fatal = function(err){ throw new Error(err); };
 
   grunt.option("force", true);
-  
+
   grunt.task.options({
     done: callback || function(){},
     error: errback || function(){}
@@ -40,16 +40,32 @@ function test_fixture(key){
   };
 }
 
-describe('The grunt-update-json module', function(){
-  it('allows a basic `from/to` field copy', test_fixture('basic'));
-  it('supports a pipe notation `["from > to"]`', test_fixture('pipe'));
-  it('supports a canonical notation `{from: null}`', test_fixture('obj'));
-  it('supports a mix `["from", {from/to: null}]`', test_fixture('list'));
-
-  it('complains when a `src` file is missing', function(done){
-    var grunt = fake_grunt('missing', null, function(error){
+function will_fail(key){
+  return function(done){
+    var grunt = fake_grunt(key, null, function(error){
       expect(error).to.not.be.an('undefined');
+      console.log("\t", error.message);
       done();
     });
-  });
+  };
+}
+
+describe('The grunt-update-json module SHOULD', function(){
+  it('allow a basic `from/to` field copy', test_fixture('basic'));
+  it('support a basic `"from, from > to"` field', test_fixture('list3'));
+  it('support a pipe notation `["from > to"]`', test_fixture('pipe'));
+  it('support a canonical notation `{from/to: null}`', test_fixture('obj'));
+  it('support a mix `["from", {from/to: null}]`', test_fixture('list'));
+  it('support a list of froms: `[{to: ["from", "from"]}]`', 
+    test_fixture('list2'));
+  it('support an obj of froms: `{to: {from: null, from: null}`', 
+    test_fixture('obj2'));
+  it('support a function `to: (src) -> src.from`', test_fixture('func'));
+});
+
+describe('The grunt-update-json module SHOULD NOT', function(){
+  it('proceed with an empty `src`', will_fail('missing'));
+  it('proceed with a boolean field name', will_fail('bool'));
+  it('proceed with a non-json src', will_fail('notjson'));
+  it('proceed with a non-json dest', will_fail('notjson2'));
 });

@@ -6,7 +6,7 @@ module.exports = function (grunt) {
       options: {
         indent: "  "
       },
-      basic: {
+      missing: {
         src: __dirname + '/../json/missing.src.json',
         dest: __dirname + '/../../../.tmp/missing.dest.json',
         fields: {

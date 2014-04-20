@@ -6,7 +6,7 @@ module.exports = function (grunt) {
       options: {
         indent: "  "
       },
-      basic: {
+      pipe: {
         src: __dirname + '/../json/pipe.src.json',
         dest: __dirname + '/../../../.tmp/pipe.dest.json',
         fields: ['a > b']

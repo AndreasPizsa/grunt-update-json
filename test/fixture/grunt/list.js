@@ -6,7 +6,7 @@ module.exports = function (grunt) {
       options: {
         indent: "  "
       },
-      basic: {
+      list: {
         src: __dirname + '/../json/list.src.json',
         dest: __dirname + '/../../../.tmp/list.dest.json',
         fields: ['a', {b: null}]

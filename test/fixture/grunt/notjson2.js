@@ -6,12 +6,10 @@ module.exports = function (grunt) {
       options: {
         indent: "  "
       },
-      obj: {
-        src: __dirname + '/../json/obj.src.json',
-        dest: __dirname + '/../../../.tmp/obj.dest.json',
-        fields: {
-          "a": null
-        }
+      notjson2: {
+        src: __dirname + '/../json/notjson.src.json',
+        dest: __dirname + '/../../../.tmp/notjson.dest.json',
+        fields: ["a"]
       }
     }
   });
