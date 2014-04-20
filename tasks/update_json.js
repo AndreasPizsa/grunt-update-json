@@ -6,55 +6,115 @@
  * Licensed under the MIT license.
  */
 
-'use strict';
 
-module.exports = function(grunt) {
-
+function UpdateJSON(grunt) {
+  'use strict';
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
-  grunt.registerMultiTask('update_json','Update JSON files with data from other JSON files',function(){
-    var _=require('lodash');
-    var self = this;
+  var _ = require('lodash'),
+    pointer = require('json-pointer'),
+    debug = grunt.verbose.debug,
+    warn = grunt.fail.warn,
+    exists = grunt.file.exists,
+    json = grunt.file.readJSON,
+    option = grunt.option;
 
-    this.files.forEach(function(file){
-      grunt.verbose.debug(file);
-      var theSourceData = {};
+  grunt.registerMultiTask(
+    'update_json',
+    'Update JSON files with data from other JSON files',
+    function(){
+      var task = this;
 
-      file.src.filter(function(filepath) {
-        grunt.verbose.debug(filepath);
-        var theFileExists = grunt.file.exists(filepath);
-        if(!theFileExists) grunt.fail.warn('File ' + filepath + ' not found.');
-        return theFileExists;
-      }).map(function(filepath){
-        grunt.verbose.debug(filepath);
-        var theFileData = grunt.file.readJSON(filepath);
-        theSourceData = _.merge(theSourceData,theFileData);
-      });
+      option.init(grunt.config.data.update_json.options || {});
 
-      if(!_.isPlainObject(self.data.fields)) {
-        theSourceData = _.pick(theSourceData,self.data.fields);
-      }
-      else {
-        theSourceData = _.pick(theSourceData,_.keys(self.data.fields));
-        _.forEach(self.data.fields, function(value,key){
-          grunt.log.debug(value,key);
-          if(value && theSourceData.hasOwnProperty(key)) {
-            theSourceData[value] = theSourceData[key];
-            delete theSourceData[key];
+      task.files.forEach(function(file){
+        var src = file.src;
+        if(!src || _.isEmpty(src)){
+          src = option("src");
+          if(!src || _.isEmpty(src = grunt.file.expand(src))){
+            warn('No data found from which to update.');
           }
+        }
+
+        var fields = task.data.fields,
+          // load the current output, if it exists
+          output = exists(file.dest) ? json(file.dest) : {},
+          // build up a union object of src files
+          input = src.reduce(function(data, src){
+              debug(src);
+              return _.merge(data, grunt.file.readJSON(src));
+            }, {}),
+          copied = {};
+
+        // put fields in canonical (key-value object) form
+        // first, break up a single string, if found
+        if(_.isString(fields)){
+          fields = fields.split(/\s*,\s*/);
+        }
+
+        // then, turn an array of fieldspecs:
+        //  ["field", "from>to", {"from": "to"}]
+        if(_.isArray(fields)){
+          fields = _.reduce(fields, mergeField, {});
+        }
+
+        copied = _.reduce(fields, expandField(input), copied);
+
+        grunt.file.write(
+          file.dest,
+          JSON.stringify(_.merge(output, copied), null, option('indent')) + '\n'
+        );
+      });
+    }
+  );
+  
+  // factory for a reduce function, bound to the input, that can get
+  // the value out of the input
+  function expandField(input){
+    var get = pointer(input);
+
+    return function(memo, fin, fout){
+      if(_.isString(fin)){
+        // field name, interpret as an absolute JSON pointer
+        memo[fout] = get("/" + fin);
+      }else if(_.isFunction(fin)){
+        // call a function
+        memo[fout] = fin(input);
+      }else if(_.isArray(fin)){
+        // pick out the values
+        memo[fout] = _.map(fin, function(value){
+          return expandField(input)({}, value, "dummy")["dummy"];
         });
+      }else if(_.isObject(fin)){
+        // build up an object of something else
+        memo[fout] = _.reduce(fin, expandField(input), {});
+      }else if(_.isNull(fin)){
+        // copy the value
+        memo[fout] = input[fout];
+      }else{
+        warn('Could not map `' + JSON.stringify(fin) + '` to `' + 
+          JSON.stringify(fout) + '`');
       }
+      return memo;
+    };
+  }
 
-      var theDest = grunt.file.exists(file.dest) 
-            ? grunt.file.readJSON(file.dest)
-            : {};
-      if(theDest == null) {
-        grunt.fail.warn('Could not read file ' + file.dest);
-      }
+  // Parse a fieldspec, like ["field", "to<from", {"to": "from"}]
+  function mergeField(memo, key){
+    var result = {},
+      match;
 
-      theDest = _.merge(theDest,theSourceData);
-      grunt.file.write(file.dest, JSON.stringify(theDest,null,'\t') + '\n');
-    });
-  })
-};
+    if(_.isPlainObject(key)){
+      result = key;
+    }else if(_.isString(key) && (match = key.match(/^(.*?)\s*>\s*(.*?)$/))){
+      result[match[2]] = match[1];
+    }else{
+      result[key] = null;
+    }
+
+    return _.merge(memo, result);
+  }
+}
+
+exports = module.exports = UpdateJSON;

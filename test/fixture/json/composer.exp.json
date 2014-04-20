@@ -1,0 +1,20 @@
+{
+  "name": "mbostock/d3",
+  "description": "A small, free JavaScript library for manipulating documents based on data.",
+  "keywords": [
+    "dom",
+    "w3c",
+    "visualization",
+    "svg",
+    "animation",
+    "canvas"
+  ],
+  "homepage": "http://d3js.org",
+  "license": "BSD",
+  "authors": [
+    {
+      "name": "Mike Bostock",
+      "homepage": "http://bost.ocks.org/mike"
+    }
+  ]
+}
