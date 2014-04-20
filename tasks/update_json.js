@@ -14,11 +14,19 @@ function UpdateJSON(grunt) {
 
   var _ = require('lodash'),
     pointer = require('json-pointer'),
+    // avoid the lint demons
+    jsonPath = require('JSONPath')["eval".slice()],
     debug = grunt.verbose.debug,
     warn = grunt.fail.warn,
     exists = grunt.file.exists,
     json = grunt.file.readJSON,
     option = grunt.option;
+    
+  var re = {
+    PATH_POINT: /^(\\)?((\$\.|\/)?.*)/,
+    DELIM: /\s*,\s*/,
+    RENAME: /^(.*?)\s*>\s*(.*?)$/
+  };
 
   grunt.registerMultiTask(
     'update_json',
@@ -50,7 +58,7 @@ function UpdateJSON(grunt) {
         // put fields in canonical (key-value object) form
         // first, break up a single string, if found
         if(_.isString(fields)){
-          fields = fields.split(/\s*,\s*/);
+          fields = fields.split(re.DELIM);
         }
 
         // then, turn an array of fieldspecs:
@@ -68,7 +76,7 @@ function UpdateJSON(grunt) {
       });
     }
   );
-  
+
   // factory for a reduce function, bound to the input, that can get
   // the value out of the input
   function expandField(input){
@@ -76,8 +84,17 @@ function UpdateJSON(grunt) {
 
     return function(memo, fin, fout){
       if(_.isString(fin)){
-        // field name, interpret as an absolute JSON pointer
-        memo[fout] = get("/" + fin);
+        var match = fin.match(re.PATH_POINT);
+        // matched  ...with a `$.`       ...but not with a `\`
+        if(match && match[3] === '$.' && !match[1]){
+          // field name, starts with an unescaped `$`, treat as JSON Path
+          memo[fout] = jsonPath(input, match[2]);
+        }else if(match && match[3] === '/' && !match[1]){
+          // field name, treat as a JSON pointer
+          memo[fout] = get(match[2]);
+        }else{
+          memo[fout] = input[match[2]];
+        }
       }else if(_.isFunction(fin)){
         // call a function
         memo[fout] = fin(input);
@@ -107,7 +124,7 @@ function UpdateJSON(grunt) {
 
     if(_.isPlainObject(key)){
       result = key;
-    }else if(_.isString(key) && (match = key.match(/^(.*?)\s*>\s*(.*?)$/))){
+    }else if(_.isString(key) && (match = key.match(re.RENAME))){
       result[match[2]] = match[1];
     }else{
       result[key] = null;

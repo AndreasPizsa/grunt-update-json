@@ -6,11 +6,12 @@ module.exports = function (grunt) {
       options: {
         indent: "  "
       },
-      point: {
-        src: __dirname + '/../json/point.src.json',
-        dest: __dirname + '/../../../.tmp/point.dest.json',
+      path: {
+        src: __dirname + '/../json/path.src.json',
+        dest: __dirname + '/../../../.tmp/path.dest.json',
         fields: {
-          a: "/a/b/c"
+          a: "$.a.b[?(@.c>1)]",
+          b: "\\$.a"
         }
       }
     }

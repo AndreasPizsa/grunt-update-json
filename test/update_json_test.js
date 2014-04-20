@@ -62,6 +62,7 @@ describe('The grunt-update-json module SHOULD', function(){
     test_fixture('obj2'));
   it('support a function `to: (src) -> src.from`', test_fixture('func'));
   it('support a basic JSON Pointer `to: "f/r/o/m"`', test_fixture('point'));
+  it('support a basic JSON Path `to: "$.f.r[@.o>m]"`', test_fixture('path'));
   it('support mapping `package.json` to `composer.json`', 
     test_fixture('composer'));
 });
