@@ -7,36 +7,37 @@
  */
 
 
-module.exports = function(grunt) {
+function UpdateJSON(grunt) {
   'use strict';
   // Please see the Grunt documentation for more information regarding task
   // creation: http://gruntjs.com/creating-tasks
 
   var _ = require('lodash'),
-    pointer = require('json-pointer');
+    pointer = require('json-pointer'),
+    debug = grunt.verbose.debug,
+    warn = grunt.fail.warn,
+    exists = grunt.file.exists,
+    json = grunt.file.readJSON,
+    option = grunt.option;
 
   grunt.registerMultiTask(
     'update_json',
     'Update JSON files with data from other JSON files',
     function(){
-      var task = this,
-        debug = grunt.verbose.debug,
-        warn = grunt.fail.warn,
-        exists = grunt.file.exists,
-        json = grunt.file.readJSON,
-        option = grunt.option;
+      var task = this;
       
       option.init(grunt.config.data.update_json.options || {});
       
       task.files.forEach(function(file){
-        debug(file);
+        if(_.isEmpty(file.src)){
+          warn('No data found from which to update.');
+        }
+
         var fields = task.data.fields,
+          // load the current output, if it exists
           output = exists(file.dest) ? json(file.dest) : {},
-          input = file.src.filter(function(src) {
-              grunt.verbose.debug(src);
-              if(grunt.file.exists(src)){ return true; }
-              warn('File ' + src + ' not found.');
-            }).reduce(function(data, src){
+          // build up a union object of src files
+          input = file.src.reduce(function(data, src){
               debug(src);
               return _.merge(data, grunt.file.readJSON(src));
             }, {}),
@@ -52,13 +53,11 @@ module.exports = function(grunt) {
 
         copied = _.reduce(fields, expandField(input), copied);
 
-        if(output == null) {
-          warn('Could not read file ' + file.dest);
-        }
+        if(output == null){ warn('Could not read file ' + file.dest); }
 
         grunt.file.write(
           file.dest,
-          JSON.stringify( _.merge(output, copied), null, option('indent'))
+          JSON.stringify(_.merge(output, copied), null, option('indent')) + '\n'
         );
       });
     }
@@ -100,4 +99,6 @@ module.exports = function(grunt) {
 
     return _.merge(memo, result);
   }
-};
+}
+
+exports = module.exports = UpdateJSON;

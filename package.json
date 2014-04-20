@@ -22,14 +22,21 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt"
   },
   "devDependencies": {
     "grunt": "~0.4.2",
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-nodeunit": "~0.2.0",
-    "json-pointer": "~0.1.0"
+    "load-grunt-tasks": "~0.4.0",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-mocha-cov": "~0.2.1",
+    "chai": "~1.9.1",
+    "should": "~3.3.1",
+    "mocha-term-cov-reporter": "~0.2.0",
+    "blanket": "~1.1.6",
+    "grunt-contrib-watch": "~0.6.1"
   },
   "peerDependencies": {
     "grunt": "~0.4.2"
@@ -46,6 +53,14 @@
     "composer.json"
   ],
   "dependencies": {
+    "json-pointer": "~0.1.0",
     "lodash": "~2.4.1"
+  },
+  "config": {
+    "blanket": {
+      "pattern": [
+        "grunt-update-json/tasks"
+      ]
+    }
   }
 }

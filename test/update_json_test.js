@@ -1,48 +1,55 @@
+/* global describe, it */
 'use strict';
 
-var grunt = require('grunt');
+var path = require('path'),
+    fs = require('fs'),
+    chai = require('chai'),
+    should = chai.should(),
+    expect = chai.expect;
 
-/*
-  ======== A Handy Little Nodeunit Reference ========
-  https://github.com/caolan/nodeunit
+function fixture(path){
+  return __dirname + '/fixture/' + path;
+}
 
-  Test methods:
-    test.expect(numAssertions)
-    test.done()
-  Test assertions:
-    test.ok(value, [message])
-    test.equal(actual, expected, [message])
-    test.notEqual(actual, expected, [message])
-    test.deepEqual(actual, expected, [message])
-    test.notDeepEqual(actual, expected, [message])
-    test.strictEqual(actual, expected, [message])
-    test.notStrictEqual(actual, expected, [message])
-    test.throws(block, [error], [message])
-    test.doesNotThrow(block, [error], [message])
-    test.ifError(value)
-*/
+function fake_grunt(key, callback, errback){
+  var grunt = require(fixture('grunt/' + key + '.js'))(require('grunt'));
 
-exports.update_json = {
-  setUp: function(done) {
-    // setup here if necessary
-    done();
-  },
-  default_options: function(test) {
-    test.expect(1);
+  grunt.task.init = function(){};
+  grunt.fail.warn = grunt.fail.fatal = function(err){ throw new Error(err); };
 
-    var actual = grunt.file.read('tmp/default_options');
-    var expected = grunt.file.read('test/expected/default_options');
-    test.equal(actual, expected, 'should describe what the default behavior is.');
+  grunt.option("force", true);
+  
+  grunt.task.options({
+    done: callback || function(){},
+    error: errback || function(){}
+  });
+  
+  grunt.task.run('update_json');
+  grunt.task.start({asyncDone: true});
+  return grunt;
+}
 
-    test.done();
-  },
-  custom_options: function(test) {
-    test.expect(1);
+function test_fixture(key){
+  return function(done){
+    var grunt = fake_grunt(key, function(error){
+      var actual = grunt.file.read(__dirname + '/../.tmp/' + key + '.dest.json'),
+        expected = grunt.file.read(fixture('json/' + key + '.exp.json'));
+      actual.should.equals(expected);
+      done();
+    });
+  };
+}
 
-    var actual = grunt.file.read('tmp/custom_options');
-    var expected = grunt.file.read('test/expected/custom_options');
-    test.equal(actual, expected, 'should describe what the custom option(s) behavior is.');
+describe('The grunt-update-json module', function(){
+  it('allows a basic `from/to` field copy', test_fixture('basic'));
+  it('supports a pipe notation `["from > to"]`', test_fixture('pipe'));
+  it('supports a canonical notation `{from: null}`', test_fixture('obj'));
+  it('supports a mix `["from", {from/to: null}]`', test_fixture('list'));
 
-    test.done();
-  },
-};
+  it('complains when a `src` file is missing', function(done){
+    var grunt = fake_grunt('missing', null, function(error){
+      expect(error).to.not.be.an('undefined');
+      done();
+    });
+  });
+});

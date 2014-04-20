@@ -6,52 +6,65 @@
  * Licensed under the MIT license.
  */
 
-'use strict';
 
 module.exports = function(grunt) {
+  'use strict';
 
   // Project configuration.
   grunt.initConfig({
+    watch: {
+      default: {
+        files: ["test/*.js", "test/fixtures/**", "tasks"],
+        tasks: ["default"]
+      }
+    },
     jshint: {
       all: [
         'Gruntfile.js',
         'tasks/*.js',
-        '<%= nodeunit.tests %>',
+        '<%= mochacov.options.files.all %>',
       ],
       options: {
         jshintrc: '.jshintrc',
-      },
+      }
     },
 
     // Before generating any new files, remove any previously-created files.
     clean: {
-      tests: ['tmp'],
+      tests: ['<%= copy.tests.files.0.dest %>']
     },
 
-    // Configuration to be run (and then tested).
-    update_json: {
-      default_options: {
-        options: {
-        },
-        files: {
-          'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123'],
-        },
-      },
-      custom_options: {
-        options: {
-          separator: ': ',
-          punctuation: ' !!!',
-        },
-        files: {
-          'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123'],
-        },
-      },
+    // Copy the 
+    copy: {
+      tests: {
+        files: [{
+          expand: true,
+          cwd: 'test/fixture/json',
+          src: ['*.dest.json'],
+          dest: '.tmp'
+        }]
+      }
     },
 
-    // Unit tests.
-    nodeunit: {
-      tests: ['test/*_test.js'],
-    },
+    // Unit tests with coverage.
+    mochacov: {
+      unit: {
+        options: {
+          reporter: 'spec'
+        }
+      },
+      coverage: {
+        options: {
+          reporter: 'mocha-term-cov-reporter',
+          coverage: true
+        }
+      },
+      options: {
+        files: 'test/*_test.js',
+        ui: 'bdd',
+        colors: true
+      }
+    }
 
   });
 
@@ -59,15 +72,12 @@ module.exports = function(grunt) {
   grunt.loadTasks('tasks');
 
   // These plugins provide necessary tasks.
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-contrib-nodeunit');
+  require('load-grunt-tasks')(grunt);
 
-  // Whenever the "test" task is run, first clean the "tmp" dir, then run this
+  // Whenever the 'test' task is run, first clean the 'tmp' dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'update_json', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'copy', 'mochacov']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
-
 };
