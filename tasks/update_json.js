@@ -25,19 +25,23 @@ function UpdateJSON(grunt) {
     'Update JSON files with data from other JSON files',
     function(){
       var task = this;
-      
+
       option.init(grunt.config.data.update_json.options || {});
-      
+
       task.files.forEach(function(file){
-        if(_.isEmpty(file.src)){
-          warn('No data found from which to update.');
+        var src = file.src;
+        if(!src || _.isEmpty(src)){
+          src = option("src");
+          if(!src || _.isEmpty(src = grunt.file.expand(src))){
+            warn('No data found from which to update.');
+          }
         }
 
         var fields = task.data.fields,
           // load the current output, if it exists
           output = exists(file.dest) ? json(file.dest) : {},
           // build up a union object of src files
-          input = file.src.reduce(function(data, src){
+          input = src.reduce(function(data, src){
               debug(src);
               return _.merge(data, grunt.file.readJSON(src));
             }, {}),

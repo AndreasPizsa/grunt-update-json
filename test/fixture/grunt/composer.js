@@ -4,10 +4,10 @@ module.exports = function (grunt) {
   grunt.initConfig({
     update_json: {
       options: {
-        indent: "  "
+        indent: "  ",
+        src: __dirname + '/../json/composer.src.json'
       },
       composer: {
-        src: __dirname + '/../json/composer.src.json',
         dest: __dirname + '/../../../.tmp/composer.dest.json',
         fields: [
           {
