@@ -5,7 +5,7 @@ Merge parts from one or more JSON files together. I use `grunt-update-json` to k
 
 [![Endorse on Coderwall](http://api.coderwall.com/andreaspizsa/endorsecount.png)](http://coderwall.com/andreaspizsa)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
-[![Build Status](https://travis-ci.org/andreaspizsa/grunt-update-json.svg)](https://travis-ci.org/andreaspizsa/grunt-update-json)
+[![Build Status](https://travis-ci.org/AndreasPizsa/grunt-update-json.svg)](https://travis-ci.org/AndreasPizsa/grunt-update-json)
 
 ## Upgrading from 1.x
 The semantics of [Object Groupings](#object-grouping) have been reversed.
