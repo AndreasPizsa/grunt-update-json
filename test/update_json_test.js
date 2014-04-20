@@ -61,6 +61,7 @@ describe('The grunt-update-json module SHOULD', function(){
   it('support an obj of froms: `{to: {from: null, from: null}`', 
     test_fixture('obj2'));
   it('support a function `to: (src) -> src.from`', test_fixture('func'));
+  it('support a basic JSON Pointer `to: "f/r/o/m"`', test_fixture('point'));
 });
 
 describe('The grunt-update-json module SHOULD NOT', function(){

@@ -68,16 +68,20 @@ function UpdateJSON(grunt) {
   // factory for a reduce function, bound to the input, that can get
   // the value out of the input
   function expandField(input){
+    var get = pointer(input);
+
     return function(memo, fin, fout){
       if(_.isString(fin)){
         // field name, interpret as an absolute JSON pointer
-        memo[fout] = pointer.get(input, "/" + fin);
+        memo[fout] = get("/" + fin);
       }else if(_.isFunction(fin)){
         // call a function
         memo[fout] = fin(input);
       }else if(_.isArray(fin)){
         // pick out the values
-        memo[fout] = _.values(_.pick(input, fin));
+        memo[fout] = _.map(fin, function(value){
+          return expandField(input)({}, value, "dummy")["dummy"];
+        });
       }else if(_.isObject(fin)){
         // build up an object of something else
         memo[fout] = _.reduce(fin, expandField(input), {});
