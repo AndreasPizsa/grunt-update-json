@@ -7,7 +7,7 @@
  */
 'use strict';
 
-var _ = require('underscore'),
+var _ = require('lodash'),
   updateJSON = require('./lib/update_json'),
   defaultOptions = require('./lib/default_options');
 
