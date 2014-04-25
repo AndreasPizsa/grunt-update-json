@@ -5,13 +5,14 @@ var path = require('path'),
     fs = require('fs'),
     chai = require('chai'),
     should = chai.should(),
-    expect = chai.expect;
+    expect = chai.expect,
+    noop = function(){};
 
 function fixture(path){
   return __dirname + '/fixture/' + path;
 }
 
-function fake_grunt(key, callback, errback){
+function fake_grunt(key, callback, errback, task){
   var grunt = require(fixture('grunt/' + key + '.js'))(require('grunt'));
 
   grunt.task.init = function(){};
@@ -20,11 +21,11 @@ function fake_grunt(key, callback, errback){
   grunt.option("force", true);
 
   grunt.task.options({
-    done: callback || function(){},
-    error: errback || function(){}
+    done: callback || noop,
+    error: errback || noop
   });
   
-  grunt.task.run('update_json');
+  grunt.task.run(task || 'update_json');
   grunt.task.start({asyncDone: true});
   return grunt;
 }
@@ -65,6 +66,13 @@ describe('The grunt-update-json module SHOULD', function(){
   it('support a basic JSON Path `to: "$.f.r[@.o>m]"`', test_fixture('path'));
   it('support mapping `package.json` to `composer.json`', 
     test_fixture('composer'));
+
+  it('support sensible defaults', function(done){
+    fake_grunt('default', function(error){
+      expect(error).to.be.an('undefined');
+      done();
+    }, noop, 'default');
+  });
 });
 
 describe('The grunt-update-json module SHOULD NOT', function(){
