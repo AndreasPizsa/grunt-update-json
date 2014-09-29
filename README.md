@@ -17,14 +17,14 @@ The semantics of [Object Groupings](#object-grouping) have been reversed:
 ## Getting Started
 
 ```shell
-npm install --save-dev grunt-update-json --save-dev
+npm install grunt-update-json --save-dev
 ```
 
 
 I highly favor using the fabulous [`load-grunt-tasks`](https://github.com/sindresorhus/load-grunt-tasks) over the tiring and cumbersome `grunt.loadNpmTasks`. Your grunt tasks are all in your `package.json`, so let's embrace [DRY](http://en.wikipedia.org/wiki/Don't_repeat_yourself):
 
 ```shell
-npm install --save-dev load-grunt-tasks
+npm install load-grunt-tasks --save-dev
 ```
 
 ```js
