@@ -17,7 +17,7 @@ The semantics of [Object Groupings](#object-grouping) have been reversed:
 ## Getting Started
 
 ```shell
-npm install --save-dev grunt-update-json --save-dev
+npm install grunt-update-json --save-dev
 ```
 
 
