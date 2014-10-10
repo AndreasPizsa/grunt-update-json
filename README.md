@@ -14,7 +14,7 @@ The semantics of [Object Groupings](#object-grouping) have been reversed.
 ## Getting Started
 
 ```shell
-npm install --save-dev grunt-update-json --save-dev
+npm install --save-dev grunt-update-json
 ```
 
 
@@ -63,7 +63,7 @@ grunt.initConfig({
         // notice how this time we're passing a hash instead
         // of an array; this allows us to map the field names.
         // We still specify all the names we want, and additionally
-        // we also specify the target name in the detination file. 
+        // we also specify the target name in the detination file.
         // to            from
         // -----------   -------------------
         'name'            : null,         // null means 'leave as is'
@@ -127,7 +127,7 @@ An input JSON file. May be a list.
 
 ### Destination Data
 > `dest`
-An output JSON file. 
+An output JSON file.
 
 ### Field Groupings
 > `fields`
@@ -135,7 +135,7 @@ an ordered collection of [_field specifications_](#field-specifications), which
 can optionally contain additional lists of fields.
 
 #### Object Grouping
-> `{fields: {field: null, another: "yetanother"}}` 
+> `{fields: {field: null, another: "yetanother"}}`
 > A list of field specs, pointing at any other kind of field specification.
 
 #### Array Grouping
@@ -163,9 +163,9 @@ can optionally contain additional lists of fields.
 > `{field: "some/deep/field"}`
 > Create or replace `field` in `dest` from `some.deep.field` in `src`.
 
-Secretly, all non-null specs are eventually passed through 
+Secretly, all non-null specs are eventually passed through
 [json-pointer](https://github.com/manuelstofer/json-pointer), with a `/`
-appended (i.e. the root). You can use more complex constructions to build 
+appended (i.e. the root). You can use more complex constructions to build
 complex declarative structures of other fields.
 
 #### Field Collapse
