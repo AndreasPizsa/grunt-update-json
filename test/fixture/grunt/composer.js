@@ -19,10 +19,10 @@ module.exports = function (grunt) {
           'keywords',
           'homepage',
           {
-            license: 'licenses/0/type',
+            license: '/licenses/0/type',
             authors: [{
-              name: 'author/name',
-              homepage: 'author/url'
+              name: '/author/name',
+              homepage: '/author/url'
             }]
           }
         ]
