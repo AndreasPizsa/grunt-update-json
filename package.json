@@ -52,9 +52,10 @@
     "composer.json"
   ],
   "dependencies": {
+    "JSONPath": "~0.10.0",
     "json-pointer": "~0.1.0",
-    "lodash": "~2.4.1",
-    "JSONPath": "~0.10.0"
+    "json-stable-stringify": "^1.0.0",
+    "lodash": "~2.4.1"
   },
   "config": {
     "blanket": {
