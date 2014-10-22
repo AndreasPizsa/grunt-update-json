@@ -10,7 +10,8 @@
 var _ = require('lodash'),
   pointer = require('json-pointer'),
   // avoid the lint demons
-  jsonPath = require('JSONPath')["eval".slice()];
+  jsonPath = require('JSONPath')["eval".slice()],
+  stringify = require('json-stable-stringify');
 
 
 var re = {
@@ -117,12 +118,18 @@ function updateJSON(grunt, files, fields, options){
       input = src.reduce(function(data, src){
           return _.merge(data, grunt.file.readJSON(src));
         }, {});
-    var copied = _.reduce(fields, expandField(input, grunt), {});
+    var copied = _.reduce(fields, expandField(input, grunt), {}),
+      jsonStr;
 
-    grunt.file.write(
-      file.dest,
-      JSON.stringify(_.merge(output, copied), null, options.indent) + '\n'
-    );
+    // if sorting was requested
+    if (options.sort) {
+      // do stringify of the passed object with sort
+      jsonStr = stringify(_.merge(output, copied), { space: options.indent });
+    } else {
+      // do stringify only
+      jsonStr = JSON.stringify(_.merge(output, copied), null, options.indent);
+    }
+    grunt.file.write(file.dest, jsonStr + '\n');
   });
 }
 
