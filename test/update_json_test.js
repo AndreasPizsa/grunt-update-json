@@ -72,6 +72,7 @@ function will_fail(key, msg_pattern){
 // the test suite
 describe('When configured, the grunt-update-json module SHOULD', function(){
   it('allow a basic `from/to` field copy', test_fixture('basic'));
+  it('allow a basic field copy with sorting', test_fixture('sort'));
   it('support a basic `"from, from > to"` field', test_fixture('list3'));
   it('support a pipe notation `["from > to"]`', test_fixture('pipe'));
   it('support a canonical notation `{from/to: null}`', test_fixture('obj'));
