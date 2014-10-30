@@ -1,11 +1,10 @@
-# grunt-update-json
+# grunt-update-json ![Travis Build Status](http://img.shields.io/travis/AndreasPizsa/grunt-update-json.svg?style=flat-square "Travis Build Status") ![npm Release](http://img.shields.io/npm/v/grunt-update-json.svg?style=flat-square "npm Release") ![npm License](http://img.shields.io/npm/l/grunt-update-json.svg?style=flat-square "npm License")
 
 Merge parts from one or more JSON files together. I use `grunt-update-json` to keep my `bower.json` and `component.json` in sync with `package.json`.
 
 
 [![Endorse on Coderwall](http://api.coderwall.com/andreaspizsa/endorsecount.png)](http://coderwall.com/andreaspizsa)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
-[![Build Status](https://travis-ci.org/AndreasPizsa/grunt-update-json.svg)](https://travis-ci.org/AndreasPizsa/grunt-update-json)
 
 ## Upgrading from 1.x
 The semantics of [Object Groupings](#object-grouping) have been reversed:
@@ -62,7 +61,7 @@ grunt.initConfig({
         // notice how this time we're passing a hash instead
         // of an array; this allows us to map the field names.
         // We still specify all the names we want, and additionally
-        // we also specify the target name in the detination file. 
+        // we also specify the target name in the detination file.
         // to            from
         // -----------   -------------------
         'name'            : null,         // null means 'leave as is'
@@ -128,7 +127,7 @@ update_json: {options: {indent: "  "}}
 ### Destination Data
 > `dest`
 >
-> An output JSON file. 
+> An output JSON file.
 
 ### Field Groupings
 > `fields`
@@ -138,7 +137,7 @@ update_json: {options: {indent: "  "}}
 
 
 #### Object Grouping
-> `{fields: {field: null, another: "yetanother"}}` 
+> `{fields: {field: null, another: "yetanother"}}`
 >
 > A list of field specs, pointing at any other kind of field specification.
 
@@ -200,7 +199,7 @@ To select a field that begins with a literal `/`, escape with a single `\`
 >  Create or replace `field` in `dest` with the value of nodes found with a
 > JSONPath query
 
-A field spec destination which starts with `$.` will be interpreted as a 
+A field spec destination which starts with `$.` will be interpreted as a
 [JSONPath](https://github.com/s3u/JSONPath) selector.
 
 To select a field that begins with a literal `$.`, escape with a single `\`
@@ -229,7 +228,7 @@ To select a field that begins with a literal `$.`, escape with a single `\`
 > Create a field named `field` that is the output of running a function against
 > `src`.
 
-If all else fails, you can supply a function which will called with a copy of 
+If all else fails, you can supply a function which will called with a copy of
 the combined source object.
 ```js
 update_json: {

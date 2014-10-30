@@ -1,20 +1,26 @@
 {
   "name": "grunt-update-json",
   "description": "Merge parts from one or more JSON files together. I use `grunt-update-json` to keep my `Bower.json` and `component.json` in sync with `package.json`.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/andreaspizsa/grunt-update-json",
-  "author": {},
+  "author": "Andreas Pizsa (http://github.com/AndreasPizsa)",
+  "contributors": [
+    "bollwyvl (https://github.com/bollwyvl)",
+    "Vasyl Zuzyak (https://github.com/ZuBB)",
+    "Andrew Dryga (https://github.com/AndrewDryga)"
+  ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/andreaspizsa/grunt-update-json.git"
+    "url": "git://github.com/AndreasPizsa/grunt-update-json.git"
   },
   "bugs": {
-    "url": "https://github.com/andreaspizsa/grunt-update-json/issues"
+    "url": "https://github.com/AndreasPizsa/grunt-update-json/issues"
   },
+  "license": "MIT",
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/andreaspizsa/grunt-update-json/blob/master/LICENSE-MIT"
+      "url": "https://github.com/AndreasPizsa/grunt-update-json/blob/master/LICENSE-MIT"
     }
   ],
   "main": "Gruntfile.js",
