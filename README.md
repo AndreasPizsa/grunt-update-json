@@ -1,4 +1,4 @@
-# grunt-update-json ![Travis Build Status](http://img.shields.io/travis/AndreasPizsa/grunt-update-json.svg?style=flat-square "Travis Build Status") ![npm Release](http://img.shields.io/npm/v/grunt-update-json.svg?style=flat-square "npm Release") ![npm License](http://img.shields.io/npm/l/grunt-update-json.svg?style=flat-square "npm License")
+# grunt-update-json [![Travis Build Status](http://img.shields.io/travis/AndreasPizsa/grunt-update-json.svg?style=flat-square)](http://travis-ci.org/AndreasPizsa/grunt-update-json) ![npm Release](http://img.shields.io/npm/v/grunt-update-json.svg?style=flat-square "npm Release") ![npm License](http://img.shields.io/npm/l/grunt-update-json.svg?style=flat-square "npm License")
 
 Merge parts from one or more JSON files together. I use `grunt-update-json` to keep my `bower.json` and `component.json` in sync with `package.json`.
 
