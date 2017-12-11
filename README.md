@@ -10,7 +10,7 @@ Merge parts from one or more JSON files together. I use `grunt-update-json` to k
 The semantics of [Object Groupings](#object-grouping) have been reversed:
 
 - was `{from: "to"}`
-- now``{to: "from"}`
+- now `{to: "from"}`
 
 
 ## Getting Started
