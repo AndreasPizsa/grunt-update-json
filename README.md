@@ -252,4 +252,4 @@ update_json: {
 
 MIT
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/AndreasPizsa/grunt-update-json/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/AndreasPizsa/grunt-update-json/trend.png)](https://bitdeli.com/free "Bitdeli Badge") [![Greenkeeper badge](https://badges.greenkeeper.io/AndreasPizsa/grunt-update-json.svg)](https://greenkeeper.io/)
